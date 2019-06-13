@@ -59,6 +59,8 @@ int main(void)
   printf("+------------------------+----+\n");
   printf("| ssize_t                | %2lu |\n", sizeof(ssize_t));
   printf("+------------------------+----+\n");
+  printf("| time_t                 | %2lu |\n", sizeof(time_t));
+  printf("+------------------------+----+\n");
   printf("| pid_t                  | %2lu |\n", sizeof(pid_t));
   printf("+------------------------+----+\n");
   printf("| void*                  | %2lu |\n", sizeof(void*));
