@@ -1,70 +1,101 @@
 #include <stdio.h>
-#include <sys/types.h>
+#include <stdlib.h>   // calloc
+#include <string.h>
 
+#include <sys/ioctl.h>   // winsize, TIOCGWINSZ
+#include <sys/types.h>   // types
+
+#define SPACES_NB 24
+
+#define HORIZONTAL()                                 \
+  do                                                 \
+  {                                                  \
+    char* tmp = calloc(SPACES_NB + 1, sizeof(char)); \
+    memset(tmp, '-', SPACES_NB);                     \
+    printf("+-%s-+-----+\n", tmp);                   \
+    free(tmp);                                       \
+    tmp = NULL;                                      \
+  } while (0)
+
+#define SIZEOF(type)                                 \
+  do                                                 \
+  {                                                  \
+    char* tmp = calloc(SPACES_NB + 1, sizeof(char)); \
+    memset(tmp, ' ', SPACES_NB);                     \
+    strncpy(tmp, #type, strlen(#type));              \
+    printf("| %s | %3lu |\n", tmp, sizeof(type));    \
+    free(tmp);                                       \
+  } while (0)
 
 int main(void)
 {
-  printf("+------------------------+----+\n");
-  printf("| char                   | %2lu |\n", sizeof(char));
-  printf("+------------------------+----+\n");
-  printf("| signed char            | %2lu |\n", sizeof(signed char));
-  printf("+------------------------+----+\n");
-  printf("| unsigned char          | %2lu |\n", sizeof(unsigned char));
-  printf("+------------------------+----+\n");
-  printf("| short                  | %2lu |\n", sizeof(short));
-  printf("+------------------------+----+\n");
-  printf("| signed short           | %2lu |\n", sizeof(signed short));
-  printf("+------------------------+----+\n");
-  printf("| signed short int       | %2lu |\n", sizeof(signed short int));
-  printf("+------------------------+----+\n");
-  printf("| unsigned short         | %2lu |\n", sizeof(unsigned short));
-  printf("+------------------------+----+\n");
-  printf("| unsigned short int     | %2lu |\n", sizeof(unsigned short int));
-  printf("+------------------------+----+\n");
-  printf("| int                    | %2lu |\n", sizeof(int));
-  printf("+------------------------+----+\n");
-  printf("| signed int             | %2lu |\n", sizeof(signed int));
-  printf("+------------------------+----+\n");
-  printf("| unsigned int           | %2lu |\n", sizeof(unsigned int));
-  printf("+------------------------+----+\n");
-  printf("| long                   | %2lu |\n", sizeof(long));
-  printf("+------------------------+----+\n");
-  printf("| signed long            | %2lu |\n", sizeof(signed long));
-  printf("+------------------------+----+\n");
-  printf("| signed long int        | %2lu |\n", sizeof(signed long int));
-  printf("+------------------------+----+\n");
-  printf("| unsigned long          | %2lu |\n", sizeof(unsigned long));
-  printf("+------------------------+----+\n");
-  printf("| unsigned long int      | %2lu |\n", sizeof(unsigned long int));
-  printf("+------------------------+----+\n");
-  printf("| long long              | %2lu |\n", sizeof(long long));
-  printf("+------------------------+----+\n");
-  printf("| long long int          | %2lu |\n", sizeof(long long int));
-  printf("+------------------------+----+\n");
-  printf("| signed long long       | %2lu |\n", sizeof(signed long long));
-  printf("+------------------------+----+\n");
-  printf("| signed long long int   | %2lu |\n", sizeof(signed long long int));
-  printf("+------------------------+----+\n");
-  printf("| unsigned long long     | %2lu |\n", sizeof(unsigned long long));
-  printf("+------------------------+----+\n");
-  printf("| unsigned long long int | %2lu |\n", sizeof(unsigned long long int));
-  printf("+------------------------+----+\n");
-  printf("| float                  | %2lu |\n", sizeof(float));
-  printf("+------------------------+----+\n");
-  printf("| double                 | %2lu |\n", sizeof(double));
-  printf("+------------------------+----+\n");
-  printf("| long double            | %2lu |\n", sizeof(long double));
-  printf("+------------------------+----+\n");
-  printf("| size_t                 | %2lu |\n", sizeof(size_t));
-  printf("+------------------------+----+\n");
-  printf("| ssize_t                | %2lu |\n", sizeof(ssize_t));
-  printf("+------------------------+----+\n");
-  printf("| time_t                 | %2lu |\n", sizeof(time_t));
-  printf("+------------------------+----+\n");
-  printf("| pid_t                  | %2lu |\n", sizeof(pid_t));
-  printf("+------------------------+----+\n");
-  printf("| void*                  | %2lu |\n", sizeof(void*));
-  printf("+------------------------+----+\n");
+#if 0
+  struct winsize sz = {0};
+
+  ioctl(0, TIOCGWINSZ, &sz);
+  printf("Screen width: %hu  Screen height: %hu\n", sz.ws_col, sz.ws_row);
+#endif
+  HORIZONTAL();
+  SIZEOF(char);
+  HORIZONTAL();
+  SIZEOF(signed char);
+  HORIZONTAL();
+  SIZEOF(unsigned char);
+  HORIZONTAL();
+  SIZEOF(short);
+  HORIZONTAL();
+  SIZEOF(signed short);
+  HORIZONTAL();
+  SIZEOF(signed short int);
+  HORIZONTAL();
+  SIZEOF(unsigned short);
+  HORIZONTAL();
+  SIZEOF(unsigned short int);
+  HORIZONTAL();
+  SIZEOF(int);
+  HORIZONTAL();
+  SIZEOF(signed int);
+  HORIZONTAL();
+  SIZEOF(unsigned int);
+  HORIZONTAL();
+  SIZEOF(long);
+  HORIZONTAL();
+  SIZEOF(signed long);
+  HORIZONTAL();
+  SIZEOF(signed long int);
+  HORIZONTAL();
+  SIZEOF(unsigned long);
+  HORIZONTAL();
+  SIZEOF(unsigned long int);
+  HORIZONTAL();
+  SIZEOF(long long);
+  HORIZONTAL();
+  SIZEOF(long long int);
+  HORIZONTAL();
+  SIZEOF(signed long long);
+  HORIZONTAL();
+  SIZEOF(signed long long int);
+  HORIZONTAL();
+  SIZEOF(unsigned long long);
+  HORIZONTAL();
+  SIZEOF(unsigned long long int);
+  HORIZONTAL();
+  SIZEOF(float);
+  HORIZONTAL();
+  SIZEOF(double);
+  HORIZONTAL();
+  SIZEOF(long double);
+  HORIZONTAL();
+  SIZEOF(size_t);
+  HORIZONTAL();
+  SIZEOF(ssize_t);
+  HORIZONTAL();
+  SIZEOF(time_t);
+  HORIZONTAL();
+  SIZEOF(pid_t);
+  HORIZONTAL();
+  SIZEOF(void*);
+  HORIZONTAL();
 
   return 0;
 }
