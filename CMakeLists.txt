@@ -12,20 +12,8 @@ include(GNUInstallDirs)
 check_include_files(sys/types.h HAVE_SYS_TYPES_H)
 
 # Executable
-add_executable(datatypes
-    ./src/datatypes.c
-    )
-target_compile_options(datatypes
-    PRIVATE -Wall -Wextra
-    )
-target_include_directories(datatypes
-    PRIVATE ${CMAKE_CURRENT_BINARY_DIR}
-    )
-install(TARGETS datatypes
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-    )
+include(src/CMakeLists.txt)
 
 # FILE CONFIGURATION
 configure_file(${CMAKE_SOURCE_DIR}/config.h.cmake
-    ${CMAKE_CURRENT_BINARY_DIR}/config.h
-    )
+               ${CMAKE_CURRENT_BINARY_DIR}/config.h)
