@@ -1,3 +1,5 @@
+#include "config.h"
+
 #include <stdio.h>
 #include <stdlib.h>   // calloc
 #include <string.h>
@@ -5,97 +7,113 @@
 #include <sys/ioctl.h>   // winsize, TIOCGWINSZ
 #include <sys/types.h>   // types
 
-#define SPACES_NB 24
+#define DATATYPES(type)            \
+  {                                \
+    .s = #type, .sz = sizeof(type) \
+  }
 
-#define HORIZONTAL()                                 \
-  do                                                 \
-  {                                                  \
-    char* tmp = calloc(SPACES_NB + 1, sizeof(char)); \
-    memset(tmp, '-', SPACES_NB);                     \
-    printf("+-%s-+-----+\n", tmp);                   \
-    free(tmp);                                       \
-    tmp = NULL;                                      \
-  } while (0)
+#define NELEMS(array) (sizeof((array)) / sizeof((array)[0]))
 
-#define SIZEOF(type)                                 \
-  do                                                 \
-  {                                                  \
-    char* tmp = calloc(SPACES_NB + 1, sizeof(char)); \
-    memset(tmp, ' ', SPACES_NB);                     \
-    strncpy(tmp, #type, strlen(#type));              \
-    printf("| %s | %3lu |\n", tmp, sizeof(type));    \
-    free(tmp);                                       \
-  } while (0)
+struct datatypes_s {
+  char* s;
+  size_t sz;
+};
+
+static size_t get_max_size(struct datatypes_s* p);
+static char* create_horizontal_line(size_t max_length);
+static void print_types(struct datatypes_s* p);
 
 int main(void)
 {
-#if 0
-  struct winsize sz = {0};
+  struct datatypes_s types[] = {
+    DATATYPES(char),
+    DATATYPES(signed char),
+    DATATYPES(unsigned char),
+    DATATYPES(short),
+    DATATYPES(signed short),
+    DATATYPES(signed short int),
+    DATATYPES(unsigned short),
+    DATATYPES(unsigned short int),
+    DATATYPES(int),
+    DATATYPES(signed int),
+    DATATYPES(unsigned int),
+    DATATYPES(long),
+    DATATYPES(signed long),
+    DATATYPES(signed long int),
+    DATATYPES(unsigned long),
+    DATATYPES(unsigned long int),
+    DATATYPES(long long),
+    DATATYPES(long long int),
+    DATATYPES(signed long long),
+    DATATYPES(signed long long int),
+    DATATYPES(unsigned long long),
+    DATATYPES(unsigned long long int),
+    DATATYPES(float),
+    DATATYPES(double),
+    DATATYPES(long double),
+    DATATYPES(size_t),
+    DATATYPES(ssize_t),
+    DATATYPES(time_t),
+    DATATYPES(pid_t),
+    DATATYPES(void*),
+    {0, 0},
+  };
 
-  ioctl(0, TIOCGWINSZ, &sz);
-  printf("Screen width: %hu  Screen height: %hu\n", sz.ws_col, sz.ws_row);
-#endif
-  HORIZONTAL();
-  SIZEOF(char);
-  HORIZONTAL();
-  SIZEOF(signed char);
-  HORIZONTAL();
-  SIZEOF(unsigned char);
-  HORIZONTAL();
-  SIZEOF(short);
-  HORIZONTAL();
-  SIZEOF(signed short);
-  HORIZONTAL();
-  SIZEOF(signed short int);
-  HORIZONTAL();
-  SIZEOF(unsigned short);
-  HORIZONTAL();
-  SIZEOF(unsigned short int);
-  HORIZONTAL();
-  SIZEOF(int);
-  HORIZONTAL();
-  SIZEOF(signed int);
-  HORIZONTAL();
-  SIZEOF(unsigned int);
-  HORIZONTAL();
-  SIZEOF(long);
-  HORIZONTAL();
-  SIZEOF(signed long);
-  HORIZONTAL();
-  SIZEOF(signed long int);
-  HORIZONTAL();
-  SIZEOF(unsigned long);
-  HORIZONTAL();
-  SIZEOF(unsigned long int);
-  HORIZONTAL();
-  SIZEOF(long long);
-  HORIZONTAL();
-  SIZEOF(long long int);
-  HORIZONTAL();
-  SIZEOF(signed long long);
-  HORIZONTAL();
-  SIZEOF(signed long long int);
-  HORIZONTAL();
-  SIZEOF(unsigned long long);
-  HORIZONTAL();
-  SIZEOF(unsigned long long int);
-  HORIZONTAL();
-  SIZEOF(float);
-  HORIZONTAL();
-  SIZEOF(double);
-  HORIZONTAL();
-  SIZEOF(long double);
-  HORIZONTAL();
-  SIZEOF(size_t);
-  HORIZONTAL();
-  SIZEOF(ssize_t);
-  HORIZONTAL();
-  SIZEOF(time_t);
-  HORIZONTAL();
-  SIZEOF(pid_t);
-  HORIZONTAL();
-  SIZEOF(void*);
-  HORIZONTAL();
-
+  print_types(types);
   return 0;
+}
+
+static size_t get_max_size(struct datatypes_s* p)
+{
+  size_t ret = 0;
+
+  for (; p->s; p++)
+  {
+    if (ret < strlen(p->s))
+    {
+      ret = strlen(p->s);
+    }
+  }
+
+  return ret;
+}
+
+static char* create_horizontal_line(size_t max_length)
+{
+  char* ret = NULL;
+  char* tmp = NULL;
+
+  tmp = calloc(max_length + 1, sizeof(*tmp));
+  memset(tmp, '-', max_length);
+  asprintf(&ret, "+-%s-+-----+", tmp);
+  free(tmp);
+
+  return ret;
+}
+
+static void print_types(struct datatypes_s* p)
+{
+  size_t max_length = 0;
+  char* horizontal_line = NULL;
+
+  // Get the maximal length of string
+  max_length = get_max_size(p);
+
+  // Create the horizontal line
+  horizontal_line = create_horizontal_line(max_length);
+
+  for (; p->s; p++)
+  {
+    char* tmp = NULL;
+
+    tmp = calloc(max_length + 1, sizeof(char));
+    memset(tmp, ' ', max_length);
+    strncpy(tmp, p->s, strlen(p->s));
+    printf("%s\n", horizontal_line);
+    printf("| %s | %3zu |\n", tmp, p->sz);
+    free(tmp);
+  }
+  printf("%s\n", horizontal_line);
+
+  free(horizontal_line);
 }
