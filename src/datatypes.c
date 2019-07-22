@@ -4,7 +4,6 @@
 #include <stdlib.h>   // calloc
 #include <string.h>
 
-#include <sys/ioctl.h>   // winsize, TIOCGWINSZ
 #include <sys/types.h>   // types
 
 #define DATATYPES(type)            \
