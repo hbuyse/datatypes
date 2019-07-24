@@ -6,6 +6,19 @@
 
 #include <sys/types.h>   // types
 
+#ifdef LIBEVENT_FOUND
+#include <event2/event_struct.h>
+#include <event2/buffer.h>
+#endif
+
+#ifdef LIBCONFIG_FOUND
+#include <libconfig.h>
+#endif
+
+#ifdef NETLOGGING_FOUND
+#include <netlogging/plugin.h>
+#endif
+
 #define DATATYPES(type)            \
   {                                \
     .s = #type, .sz = sizeof(type) \
@@ -55,6 +68,16 @@ int main(void)
     DATATYPES(time_t),
     DATATYPES(pid_t),
     DATATYPES(void*),
+#ifdef LIBCONFIG_FOUND
+    DATATYPES(config_t),
+    DATATYPES(config_setting_t),
+#endif
+#ifdef LIBEVENT_FOUND
+    DATATYPES(struct event),
+#endif
+#ifdef NETLOGGING_FOUND
+    DATATYPES(struct nl_plugin_s),
+#endif
     {0, 0},
   };
 
